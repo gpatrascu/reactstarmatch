@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useState, FunctionComponent, FC} from 'react';
 import './App.css';
 
-const StarMatch: React.FC = () => {
+const StarMatch: FC = () => {
+  const [stars, setStars] = useState(utils.random(1,9));
+  
   return (
       <div className="game">
         <div className="help">
@@ -9,32 +11,27 @@ const StarMatch: React.FC = () => {
         </div>
         <div className="body">
           <div className="left">
-            <div className="star" />
-            <div className="star" />
-            <div className="star" />
-            <div className="star" />
-            <div className="star" />
-            <div className="star" />
-            <div className="star" />
-            <div className="star" />
-            <div className="star" />
+            {utils.range(1, stars).map(starId => 
+                <div key={starId} className="star"/>)}
           </div>
           <div className="right">
-            <button className="number">1</button>
-            <button className="number">2</button>
-            <button className="number">3</button>
-            <button className="number">4</button>
-            <button className="number">5</button>
-            <button className="number">6</button>
-            <button className="number">7</button>
-            <button className="number">8</button>
-            <button className="number">9</button>
+            {utils.range(1, 9).map(number =>
+                <PlayNumber key={number}
+                        number={number}/>) }
           </div>
         </div>
         <div className="timer">Time Remaining: 10</div>
       </div>
   );
+};
+
+type NumberProps = {
+  number: number
 }
+
+const PlayNumber:FunctionComponent<NumberProps> = ({number}) =>{
+  return <button className="number" onClick={() => console.log(number)}>{number}</button>
+};
 
 // Color Theme
 const colors = {
