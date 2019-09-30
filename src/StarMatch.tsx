@@ -1,8 +1,17 @@
 import React, {useState, FunctionComponent, FC} from 'react';
 import './App.css';
 
+const StarDisplay = ({stars = 0}) =>{  
+    return (
+            <>
+              {utils.range(1, stars).map(starId =>
+                  <div key={starId} className="star"/>)}
+            </>
+    )
+};
 const StarMatch: FC = () => {
   const [stars, setStars] = useState(utils.random(1,9));
+  const [availableNumbers, setAvailableNnumbers] = useState()
   
   return (
       <div className="game">
@@ -11,8 +20,7 @@ const StarMatch: FC = () => {
         </div>
         <div className="body">
           <div className="left">
-            {utils.range(1, stars).map(starId => 
-                <div key={starId} className="star"/>)}
+            <StarDisplay stars={stars}/>
           </div>
           <div className="right">
             {utils.range(1, 9).map(number =>
@@ -25,11 +33,7 @@ const StarMatch: FC = () => {
   );
 };
 
-type NumberProps = {
-  number: number
-}
-
-const PlayNumber:FunctionComponent<NumberProps> = ({number}) =>{
+const PlayNumber = ({number = 0}) =>{
   return <button className="number" onClick={() => console.log(number)}>{number}</button>
 };
 
