@@ -1,4 +1,4 @@
-import React, {useState, FunctionComponent, FC} from 'react';
+import React, {FC, useState} from 'react';
 import './App.css';
 
 const StarDisplay = ({stars = 0}) =>{  
@@ -11,7 +11,46 @@ const StarDisplay = ({stars = 0}) =>{
 };
 const StarMatch: FC = () => {
   const [stars, setStars] = useState(utils.random(1,9));
-  const [availableNumbers, setAvailableNnumbers] = useState()
+  const [availableNumbers, setAvailableNumbers] = useState<number[]>(utils.range(1,9));
+  const [candidateNumbers, setCandidateNumbers] = useState<number[]>([]);
+
+  const getState = (number : number) => { 
+      
+      if (!availableNumbers.includes(number)){
+          return 'used';
+      }
+      
+      if (!candidateNumbers.includes(number)){
+          return 'available';
+      }
+      
+      if (utils.sum(candidateNumbers) > stars){
+          return 'wrong';
+      }
+
+      return 'candidate'
+  }
+  
+  const onNumberClick = (number: number, state = "available") => {
+      if (state === "used"){
+          return;
+      }
+      
+      const newCandidates = candidateNumbers.concat(number);
+      
+      if (utils.sum(newCandidates) === stars){
+          const newAvailableNums = availableNumbers
+              .filter(value => !candidateNumbers.includes(value))
+              .filter(value => value !== number);
+          setStars(utils.randomSumIn(newAvailableNums, 9));
+          setAvailableNumbers(newAvailableNums);
+          setCandidateNumbers([]);
+      }
+      else{
+          setCandidateNumbers(newCandidates);
+      }
+      
+  }
   
   return (
       <div className="game">
@@ -24,8 +63,11 @@ const StarMatch: FC = () => {
           </div>
           <div className="right">
             {utils.range(1, 9).map(number =>
-                <PlayNumber key={number}
-                        number={number}/>) }
+                <PlayNumber key={number} 
+                            number={number}
+                            state = {getState(number)}
+                            onClick={onNumberClick}
+                />) }
           </div>
         </div>
         <div className="timer">Time Remaining: 10</div>
@@ -33,12 +75,21 @@ const StarMatch: FC = () => {
   );
 };
 
-const PlayNumber = ({number = 0}) =>{
-  return <button className="number" onClick={() => console.log(number)}>{number}</button>
+const PlayNumber = ({number = 0, state='available', onClick = (number: number, state:string) => {}}) =>{
+  return <button className="number"
+                 style={{backgroundColor: colors[state]}}
+                 onClick={() => onClick(number, state)}
+  >
+      {number}
+          </button>
 };
 
+interface IData {
+    [ key: string ]: string;
+}
+
 // Color Theme
-const colors = {
+const colors:IData = {
   available: 'lightgray',
   used: 'lightgreen',
   wrong: 'lightcoral',
