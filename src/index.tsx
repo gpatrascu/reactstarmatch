@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import StarMatch from "./StarMatch";
+import StarMacth from "./StarMatch";
 
-ReactDOM.render(<StarMatch />, document.getElementById('root'));
+ReactDOM.render(<StarMacth />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
