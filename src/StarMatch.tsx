@@ -29,25 +29,6 @@ const StarMatch = () => {
                   startNewGame = { () => setGameId(gameId + 1) } />);
 }
 
-const useGameState = ()=>{
-    const [stars, setStars] = useState(utils.random(1,9));
-    const [availableNumbers, setAvailableNumbers] = useState<number[]>(utils.range(1,9));
-    const [candidateNumbers, setCandidateNumbers] = useState<number[]>([]);
-    const [secondsLeft, setSecondsLeft] = useState(10);
-
-    useEffect(()=> {
-        if (secondsLeft <= 0){
-            return;
-        }
-
-        const timerId = setTimeout( ()=> {
-            setSecondsLeft(secondsLeft -1);
-        }, 1000 );
-
-        return ()=> clearTimeout(timerId);
-    });
-}
-
 const Game = ({ startNewGame = () =>{} }) => {
   const [stars, setStars] = useState(utils.random(1,9));
   const [availableNumbers, setAvailableNumbers] = useState<number[]>(utils.range(1,9));
@@ -55,7 +36,7 @@ const Game = ({ startNewGame = () =>{} }) => {
   const [secondsLeft, setSecondsLeft] = useState(10);
   
   useEffect(()=> {
-      if (secondsLeft <= 0){
+      if (secondsLeft <= 0 || availableNumbers.length === 0){
           return;
       }
       
